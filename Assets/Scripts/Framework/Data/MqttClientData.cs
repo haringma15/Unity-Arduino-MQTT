@@ -64,7 +64,11 @@ public class MqttClientData : MonoBehaviour
         Debug.Log($"received message {e.Message} for topic {e.Topic}");
         switch (e.Topic.Split('-')[0])
         {
-            case "Arduino": break;
+            case "Arduino":
+                MainThreadDispatcher.RunOnMainThread(
+                    () => ((Prototype_Scene)DB.Helpers.currentScene).IncrementCounter()
+                );
+            break;
         }
     }
 }

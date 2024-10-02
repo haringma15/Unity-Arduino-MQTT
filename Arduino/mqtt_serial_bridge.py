@@ -26,6 +26,9 @@ def on_connect(client, userdata, flags, rc):
 # Receive callback
 def on_message(client, userdata, msg):
     print(f"Message received from {msg.topic}: {msg.payload.decode()}")
+    payload = msg.payload.decode()
+    if (payload == "GREEN") ser.write(b'MQTT_GREEN\n')
+    if (payload == "RED") ser.write(b'MQTT_RED\n')
 
 def connect_to_mqtt():
     client = mqtt.Client()

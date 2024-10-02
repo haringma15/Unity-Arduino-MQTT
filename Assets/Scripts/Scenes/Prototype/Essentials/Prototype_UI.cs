@@ -7,4 +7,7 @@ public class Prototype_UI : BaseUi
         mqttMenu.Initialize(this);
         mqttMenu.Show();
     }
+
+
+    public void IncrementCounter() => mqttMenu.IncrementCounter();
 }

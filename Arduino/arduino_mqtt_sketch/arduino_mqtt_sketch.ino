@@ -48,5 +48,23 @@ void loop() {
     digitalWrite(redLedPin, LOW);
   }
 
+  if (Serial.available() > 0) {
+    String response = Serial.readStringUntil('\n');
+
+    if (response == "GREEN") {
+      mqttConnected = true;
+      digitalWrite(greenLedPin, HIGH);
+      delay(1000);
+      digitalWrite(greenLedPin, LOW);
+    }
+
+    if (response == "RED") {
+      mqttConnected = true;
+      digitalWrite(redLedPin, HIGH);
+      delay(1000);
+      digitalWrite(redLedPin, LOW);
+    }
+  }
+
   delay(5000);
 }
