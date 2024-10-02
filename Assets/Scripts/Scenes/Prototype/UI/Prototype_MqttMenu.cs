@@ -10,10 +10,10 @@ public class Prototype_MqttMenu : UiMenu
 
     public void OnClick_Test1()
     {
-        DB.MqttClient.Publish(DB.Helpers.testTopic, "GREEN");
+        DB.MqttClient.Publish("Arduino-Unity-MQTT-Test", "GREEN");
     }
     public void OnClick_Test2()
     {
-        DB.MqttClient.Publish(DB.Helpers.testTopic, "RED");
+        DB.MqttClient.Publish("Arduino-Unity-MQTT-Test", "RED");
     }
 }

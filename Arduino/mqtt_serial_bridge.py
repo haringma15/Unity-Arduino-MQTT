@@ -13,6 +13,9 @@ MQTT_TOPIC = "Arduino-Unity-MQTT-Test"
 ser = serial.Serial('COM4', 9600)
 time.sleep(2)
 
+# MQTT client initialization (global for publishing later)
+client = mqtt.Client()
+
 # Connect callback
 def on_connect(client, userdata, flags, rc):
     if rc == 0:
@@ -25,13 +28,16 @@ def on_connect(client, userdata, flags, rc):
 
 # Receive callback
 def on_message(client, userdata, msg):
-    print(f"Message received from {msg.topic}: {msg.payload.decode()}")
     payload = msg.payload.decode()
-    if (payload == "GREEN") ser.write(b'MQTT_GREEN\n')
-    if (payload == "RED") ser.write(b'MQTT_RED\n')
+    print(f"Message received from {msg.topic}: {payload}")
+    if payload == "GREEN":
+        print("Perform Green Action")
+        ser.write(b'MQTT_GREEN\n')
+    if payload == "RED": 
+        print("Perform Red Action")
+        ser.write(b'MQTT_RED\n')
 
 def connect_to_mqtt():
-    client = mqtt.Client()
     client.username_pw_set(MQTT_USERNAME, MQTT_PASSWORD)
     client.on_connect = on_connect
     client.on_message = on_message
@@ -53,7 +59,14 @@ while True:
             print("Attempting to connect to MQTT server...")
             success = connect_to_mqtt()
         
-        if message == "PUBLISH_MQTT":
-            print("Publish!")
+        if message.startswith("PUBLISH_MQTT"):
+            try:
+                payload = message.split(":")[1]
+                print(f"Publishing to MQTT: {payload}")
+                client.publish(MQTT_TOPIC, payload)
+                ser.write(b'MQTT_PUBLISHED\n')
+            except IndexError:
+                print("No payload to publish. Expected format: PUBLISH_MQTT:payload")
+                ser.write(b'MQTT_PUBLISH_FAILED\n')
             
     time.sleep(1)

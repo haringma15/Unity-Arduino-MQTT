@@ -20,7 +20,7 @@ public class MqttClientData : MonoBehaviour
             string clientID = $"TestClient_{Random.Range(10000, 99999)}";
             mqttClient.Connect(clientID, Secret.MqttUsername, Secret.MqttPassword);
 
-            Subscribe(DB.Helpers.testTopic);
+            Subscribe("Arduino-Unity-MQTT-Test");
 
             Debug.Log($"Client {clientID} is now connected? {mqttClient.IsConnected}");
         }
@@ -39,7 +39,7 @@ public class MqttClientData : MonoBehaviour
 
     public void CleanupSession()
     {
-        string[] topics = new string[] { DB.Helpers.testTopic };
+        string[] topics = new string[] { "Arduino-Unity-MQTT-Test" };
         mqttClient.Unsubscribe(topics);
     }
 
@@ -62,13 +62,8 @@ public class MqttClientData : MonoBehaviour
     private void OnMqttMessageReceived(object sender, MqttMsgPublishEventArgs e)
     {
         Debug.Log($"received message {e.Message} for topic {e.Topic}");
-        switch (e.Topic.Split('-')[0])
-        {
-            case "Arduino":
-                MainThreadDispatcher.RunOnMainThread(
-                    () => ((Prototype_Scene)DB.Helpers.currentScene).IncrementCounter()
-                );
-            break;
-        }
+        MainThreadDispatcher.RunOnMainThread(
+            () => ((Prototype_Scene)DB.Helpers.currentScene).IncrementCounter()
+        );
     }
 }

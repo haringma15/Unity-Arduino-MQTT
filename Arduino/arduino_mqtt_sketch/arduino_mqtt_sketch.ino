@@ -22,27 +22,39 @@ void setup() {
 void loop() {
   // Request MQTT connection via PC
   if (!mqttConnected) {
-    Serial.println("CONNECT_MQTT");
-
-    // Wait for response
-    if (Serial.available() > 0) {
-      String response = Serial.readStringUntil('\n');
-
-      if (response == "MQTT_CONNECTED") {
-        mqttConnected = true;
-        digitalWrite(greenLedPin, HIGH);
-        delay(2000);
-        digitalWrite(greenLedPin, LOW);
-      }
-    } else {
-      digitalWrite(redLedPin, HIGH);
-      delay(200);
-      digitalWrite(redLedPin, LOW);
-    }
+    connect();
+    delay(5000);
+  } else {
+    handleMessages();
+    delay(1000);
   }
 
-  if (mqttConnected && digitalRead(buttonPin) == HIGH) {
-    Serial.println("PUBLISH_MQTT");
+  delay(5000);
+}
+
+void connect() {
+  Serial.println("CONNECT_MQTT");
+
+  // Wait for response
+  if (Serial.available() > 0) {
+    String response = Serial.readStringUntil('\n');
+
+    if (response == "MQTT_CONNECTED") {
+      mqttConnected = true;
+      digitalWrite(greenLedPin, HIGH);
+      delay(1000);
+      digitalWrite(greenLedPin, LOW);
+    }
+  } else {
+    digitalWrite(redLedPin, HIGH);
+    delay(200);
+    digitalWrite(redLedPin, LOW);
+  }
+}
+
+void handleMessages() {
+  if (digitalRead(buttonPin) == HIGH) {
+    Serial.println("PUBLISH_MQTT:test");
     digitalWrite(redLedPin, HIGH);
     delay(1000);
     digitalWrite(redLedPin, LOW);
@@ -51,20 +63,16 @@ void loop() {
   if (Serial.available() > 0) {
     String response = Serial.readStringUntil('\n');
 
-    if (response == "GREEN") {
-      mqttConnected = true;
+    if (response == "MQTT_GREEN") {
       digitalWrite(greenLedPin, HIGH);
       delay(1000);
       digitalWrite(greenLedPin, LOW);
     }
 
-    if (response == "RED") {
-      mqttConnected = true;
+    if (response == "MQTT_RED") {
       digitalWrite(redLedPin, HIGH);
       delay(1000);
       digitalWrite(redLedPin, LOW);
     }
   }
-
-  delay(5000);
 }

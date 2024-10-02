@@ -6,6 +6,7 @@ public abstract class BaseScene : MonoBehaviour
 
     void Start()
     {
+        DB.Helpers.currentScene = this;
         ui.Initialize(this);
         InitializeSpecifics();
     }
