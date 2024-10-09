@@ -20,7 +20,7 @@ public class MqttClientData : MonoBehaviour
             string clientID = $"TestClient_{Random.Range(10000, 99999)}";
             mqttClient.Connect(clientID, Secret.MqttUsername, Secret.MqttPassword);
 
-            Subscribe("Arduino-Unity-MQTT-Test");
+            Subscribe("cosa/room3/habitat/solar");
 
             Debug.Log($"Client {clientID} is now connected? {mqttClient.IsConnected}");
         }
@@ -39,7 +39,7 @@ public class MqttClientData : MonoBehaviour
 
     public void CleanupSession()
     {
-        string[] topics = new string[] { "Arduino-Unity-MQTT-Test" };
+        string[] topics = new string[] { "cosa/room3/habitat/solar" };
         mqttClient.Unsubscribe(topics);
     }
 
