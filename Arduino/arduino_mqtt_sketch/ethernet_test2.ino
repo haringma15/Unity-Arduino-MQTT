@@ -2,7 +2,6 @@
 #include <Ethernet.h>
 #include <PubSubClient.h>
 
-// HiveMQ public broker address
 const char* mqtt_server = "dmt.fh-joanneum.at";
 const int mqtt_port = 1883;
 const char* mqtt_username = "dmt";
